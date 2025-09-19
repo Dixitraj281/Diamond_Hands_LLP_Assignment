@@ -1,4 +1,4 @@
-# Stocky Assignment
+# Assignment Overview
 
 this is a small project to manage rewarding users with stock shares and see portfolio. build with node + express + mongodb in backend and react + vite in frontend. 
 
