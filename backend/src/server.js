@@ -25,6 +25,11 @@ app.use("/api", rewardsRouter);
 app.use("/api", statsRouter);
 app.use("/api", usersRouter);
 
+app.get("/api", (req, res) => {
+  res.json({ message: "API running. Try /api/users or /api/health" });
+});
+
+
 const PORT = process.env.PORT || 8000;
 
 (async () => {
