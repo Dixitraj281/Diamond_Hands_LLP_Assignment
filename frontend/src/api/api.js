@@ -1,4 +1,4 @@
-const API_BASE = "/api";
+const API_BASE = import.meta.env.VITE_API_BASE || "/api";
 
 async function jsonOrThrow(res) {
   const text = await res.text();
@@ -47,13 +47,10 @@ export async function createUser(payload) {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(payload),
   });
-  if (!res.ok) throw new Error(`Create user failed (${res.status})`);
-  return res.json();
+  return jsonOrThrow(res);
 }
 
 export async function getUsers() {
   const res = await fetch(`${API_BASE}/users`);
-  if (!res.ok) throw new Error(`List users failed (${res.status})`);
-  return res.json();
+  return jsonOrThrow(res);
 }
-
