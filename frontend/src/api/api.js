@@ -1,4 +1,12 @@
-const API_BASE = import.meta.env.VITE_API_BASE || "/api";
+// frontend/src/api/api.js
+const ROOT =
+  (import.meta.env.VITE_API_BASE || import.meta.env.VITE_API_URL || "").replace(/\/$/, "");
+
+// If no env provided (local dev), fall back to same-origin
+const ORIGIN = ROOT || (typeof window !== "undefined" ? window.location.origin : "");
+
+// Always talk to /api on that origin
+const API_BASE = `${ORIGIN}/api`;
 
 async function jsonOrThrow(res) {
   const text = await res.text();
@@ -12,11 +20,25 @@ async function jsonOrThrow(res) {
   }
 }
 
+export async function createUser(payload) {
+  const res = await fetch(`${API_BASE}/users`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  });
+  return jsonOrThrow(res);
+}
+
+export async function getUsers() {
+  const res = await fetch(`${API_BASE}/users`);
+  return jsonOrThrow(res);
+}
+
 export async function postReward(payload) {
   const res = await fetch(`${API_BASE}/reward`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(payload)
+    body: JSON.stringify(payload),
   });
   return jsonOrThrow(res);
 }
@@ -38,19 +60,5 @@ export async function getStats(userId) {
 
 export async function getHistoricalINR(userId) {
   const res = await fetch(`${API_BASE}/historical-inr/${encodeURIComponent(userId)}`);
-  return jsonOrThrow(res);
-}
-
-export async function createUser(payload) {
-  const res = await fetch(`${API_BASE}/users`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(payload),
-  });
-  return jsonOrThrow(res);
-}
-
-export async function getUsers() {
-  const res = await fetch(`${API_BASE}/users`);
   return jsonOrThrow(res);
 }
